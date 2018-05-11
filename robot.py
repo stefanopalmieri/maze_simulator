@@ -21,7 +21,7 @@ class Robot():
     # TODO: make sure that python's randint is the same as C# in term of inclusiveness.
     # Also find out what value headingNoise shoud be, 200 is incorrect
     def noisy_heading(self):
-        headingNoise = 200
+        headingNoise = 2
         handedness = 1 if self.rand_bool() else -1
         noisy = self.heading + 0.1 * handedness * random.randint(0, headingNoise) / 100.0
         return noisy
