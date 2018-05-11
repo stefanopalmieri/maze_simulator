@@ -7,9 +7,10 @@ def main():
 	for t in range(1000):
 		time.sleep(0.01)
 		sim.render()
-		observation, reward, done, info = sim.step([0.01, 1.0, 0], 0.2)
+		observation, done, info = sim.step([0.01, 1.0, 0], 0.2)
 		if done:
 			print("Episode finished after {} timesteps".format(t+1))
+			print(sim.evaluate_fitness())
 			break
 
 if __name__ == "__main__":

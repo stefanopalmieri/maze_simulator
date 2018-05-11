@@ -13,9 +13,8 @@ class MazeSimulator():
             self.renderer = renderer.Renderer(600, 500, 'Maze Simulator')
 
         self.env = env.Environment(xml_file)
-        factory = FitnessFunctionFactory()
-        fitness_function = factory.get_hardmaze_fitness_function()
-        print(fitness_function(5))
+        self.pois_reached = [False] * len(self.env.pois)
+        print(self.pois_reached)
 
     def reset(self):
         self.env.reset()
@@ -29,16 +28,20 @@ class MazeSimulator():
 
     def step(self, action, time_delta):
         observation = 0
-        reward = 0
         done = 0
         info = 0
 
         self.step_robot(action, time_delta)
 
-        return observation, reward, done, info
+        return observation, done, info
 
     def render(self):
         self.renderer.render(self.env)
+
+    def evaluate_fitness(self):
+        factory = FitnessFunctionFactory()
+        fitness_function = factory.get_fitness_function('hardmaze')
+        return fitness_function(self.pois_reached, self.env)
 
     def quit(self):
         pygame.quit()
