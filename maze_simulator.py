@@ -14,10 +14,12 @@ class MazeSimulator():
 
         self.env = env.Environment(xml_file)
         self.pois_reached = [False] * len(self.env.pois)
-        print(self.pois_reached)
+        self.reached_goal = False
 
     def reset(self):
         self.env.reset()
+        self.pois_reached = [False] * len(self.env.pois)
+        self.reached_goal = False
 
     def step_robot(self, outputs, time_step):
         """
@@ -41,7 +43,7 @@ class MazeSimulator():
     def evaluate_fitness(self):
         factory = FitnessFunctionFactory()
         fitness_function = factory.get_fitness_function('hardmaze')
-        return fitness_function(self.pois_reached, self.env)
+        return fitness_function(self.pois_reached, self.env, self.reached_goal)
 
     def quit(self):
         pygame.quit()
