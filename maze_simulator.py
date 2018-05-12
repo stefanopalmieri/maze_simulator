@@ -35,21 +35,23 @@ class MazeSimulator():
         info = 0
 
         self.step_robot(action, time_delta)
-        self.update_pois()
+        done = self.update_pois()
 
         return observation, done, info
 
     def update_pois(self):
         """
         Update the reached pois and if the robot has reached the goal.
+        Return whether or not the robot has reached the goal.
         """
         if distance.robot_distance_from_goal(self.env) < 35.0:
             self.reached_goal = True
+            return True
         else:
             for i in range(0, len(self.env.pois)):
                 if distance.robot_distance_from_poi(self.env, i) < 20.0:
                     self.pois_reached[i] = True
-                    print("reached a new poi")
+            return False
 
     def render(self):
         self.renderer.render(self.env)

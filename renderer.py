@@ -1,7 +1,9 @@
 import environment as env
+import math
 import pygame
 
 WHITE = (255,255,255)
+GREEN = (0, 255, 0)
 # Width of line
 LINE_WIDTH = 3
 POINT_RAD = 5
@@ -25,10 +27,18 @@ class Renderer():
             by = wall.by
             pygame.draw.line(self.screen, color, [ax, ay], [bx,by], LINE_WIDTH)
 
+    def render_rangefinder(self, x, y, radius, heading, finder):
+        bx = x + (radius + finder.max_range) * math.cos(heading + finder.angle)
+        by = y - (radius + finder.max_range) * math.sin(heading + finder.angle)
+        pygame.draw.line(self.screen, GREEN, [x, y], [bx,by], LINE_WIDTH)
+
     def render_robot(self, robot):
         x = int(robot.location[0])
         y = int(robot.location[1])
         radius = robot.default_robot_size
+        for finder in robot.rangefinders:
+            self.render_rangefinder(x, y, radius, robot.heading, finder)
+        pygame.draw.circle(self.screen, WHITE, [x, y], int(radius))
         pygame.draw.circle(self.screen, (0,0,0), [x, y], int(radius), LINE_WIDTH)
 
     def render_goal(self, goal):

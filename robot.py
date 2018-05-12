@@ -1,5 +1,6 @@
 import math
 import random
+from rangefinder import RangeFinder
 
 class Robot():
     def __init__(self, location):
@@ -10,10 +11,15 @@ class Robot():
         self.default_robot_size = 10.5 # radius of robot
         self.default_sensor_density = 5
         self.velocity = 0.0
-        self.heading = 0.0
+        self.heading = math.pi/2
         self.location = location
         self.old_location = location
         self.time_step = 0.1
+        self.rangefinders = []
+        for i in range(0,5):
+            # TODO Fix max_distance on this rangefinder
+            between_angle = math.pi/4.0
+            self.rangefinders.append(RangeFinder(math.pi/2-(between_angle*i), 30.0))
 
     def rand_bool(self):
         return bool(random.getrandbits(1))
@@ -34,7 +40,7 @@ class Robot():
         turnSpeed = 4.28
 
         self.velocity = speed * outputs[1]
-        self.heading += (outputs[2] - outputs[0]) * turnSpeed * time_step
+        self.heading += (outputs[0] - outputs[2]) * turnSpeed * time_step
 
     def update_position(self):
         self.old_location = self.location
@@ -47,7 +53,7 @@ class Robot():
         dx = math.cos(temp_heading) * self.velocity * self.time_step
         dy = math.sin(temp_heading) * self.velocity * self.time_step
         x = self.location[0] + dx
-        y = self.location[1] + dy
+        y = self.location[1] - dy
         self.location = (x, y)
         
        

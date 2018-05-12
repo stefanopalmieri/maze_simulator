@@ -8,7 +8,6 @@ def main():
 	for t in range(7000):
 		time.sleep(0.01)
 		sim.render()
-		print(sim.evaluate_fitness())
 		events = pygame.event.get()
 		action = [0, 0.1, 0]
 		for event in events:
