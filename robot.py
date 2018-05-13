@@ -1,5 +1,6 @@
 import math
 import random
+from radar import Radar
 from rangefinder import RangeFinder
 
 class Robot():
@@ -15,21 +16,30 @@ class Robot():
         self.location = location
         self.old_location = location
         self.time_step = 0.1
+        self.heading_noise = 0.0
+        self.stopped = False
         self.rangefinders = []
+        self.radars = []
         for i in range(0,5):
-            # TODO Fix max_distance on this rangefinder
             between_angle = math.pi/4.0
-            self.rangefinders.append(RangeFinder(math.pi/2-(between_angle*i), 30.0))
+            final_angle = math.pi/2-(between_angle*i)
+            self.rangefinders.append(RangeFinder(final_angle, self.actualRange))
+        for i in range(0,4):
+            between_angle = math.pi/2.0
+            start_angle = math.pi/4-(between_angle*i)
+            self.radars.append(Radar(start_angle, start_angle + between_angle))
 
     def rand_bool(self):
         return bool(random.getrandbits(1))
 
+    def undo(self):
+        self.location = self.old_location
+
     # TODO: make sure that python's randint is the same as C# in term of inclusiveness.
     # Also find out what value headingNoise shoud be, 200 is incorrect
     def noisy_heading(self):
-        headingNoise = 2
         handedness = 1 if self.rand_bool() else -1
-        noisy = self.heading + 0.1 * handedness * random.randint(0, headingNoise) / 100.0
+        noisy = self.heading + 0.1 * handedness * random.randint(0, self.heading_noise) / 100.0
         return noisy
 
     def decide_action(self, outputs, time_step):
@@ -47,13 +57,13 @@ class Robot():
 
         # update current coordinates (may be revoked if new position forces collision)
         # TODO place code below under stop conditional
-        #if not stopped:
-        temp_heading = self.noisy_heading()
-        self.heading = temp_heading;
-        dx = math.cos(temp_heading) * self.velocity * self.time_step
-        dy = math.sin(temp_heading) * self.velocity * self.time_step
-        x = self.location[0] + dx
-        y = self.location[1] - dy
-        self.location = (x, y)
+        if not self.stopped:
+            temp_heading = self.noisy_heading()
+            self.heading = temp_heading;
+            dx = math.cos(temp_heading) * self.velocity * self.time_step
+            dy = math.sin(temp_heading) * self.velocity * self.time_step
+            x = self.location[0] + dx
+            y = self.location[1] - dy
+            self.location = (x, y)
         
        
