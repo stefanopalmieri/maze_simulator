@@ -81,6 +81,6 @@ class Renderer():
         self.render_walls(env.walls)
         self.render_pois(env.pois)
         self.render_goal(env.goal)
-        self.render_aoi()
+        #self.render_aoi()
         self.render_robot(env.robot)
         pygame.display.update() 

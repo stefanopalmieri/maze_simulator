@@ -1,5 +1,6 @@
 import math
 import random
+import utils
 from radar import Radar
 from rangefinder import RangeFinder
 
@@ -17,7 +18,6 @@ class Robot():
         self.old_location = location
         self.time_step = 0.1
         self.heading_noise = 0.0
-        self.stopped = False
         self.rangefinders = []
         self.radars = []
         for i in range(0,5):
@@ -35,7 +35,6 @@ class Robot():
     def undo(self):
         self.location = self.old_location
 
-    # TODO: make sure that python's randint is the same as C# in term of inclusiveness.
     # Also find out what value headingNoise shoud be, 200 is incorrect
     def noisy_heading(self):
         handedness = 1 if self.rand_bool() else -1
@@ -56,14 +55,21 @@ class Robot():
         self.old_location = self.location
 
         # update current coordinates (may be revoked if new position forces collision)
-        # TODO place code below under stop conditional
-        if not self.stopped:
-            temp_heading = self.noisy_heading()
-            self.heading = temp_heading;
-            dx = math.cos(temp_heading) * self.velocity * self.time_step
-            dy = math.sin(temp_heading) * self.velocity * self.time_step
-            x = self.location[0] + dx
-            y = self.location[1] - dy
-            self.location = (x, y)
-        
-       
+        temp_heading = self.noisy_heading()
+        self.heading = temp_heading;
+        dx = math.cos(temp_heading) * self.velocity * self.time_step
+        dy = math.sin(temp_heading) * self.velocity * self.time_step
+        x = self.location[0] + dx
+        y = self.location[1] - dy
+        self.location = (x, y)
+
+    def update_rangefinders(self, walls):
+        for finder in self.rangefinders:
+            length = self.default_robot_size
+            angle = self.heading + finder.angle
+            a1x = self.location[0]
+            a1y = self.location[1]
+            #a2x = self.location[0] + (length) * math.cos(angle)
+            #a2y = self.location[1] - (length) * math.sin(angle)
+            #finder.distance = utils.raycast(walls, finder, a2x, a2y, self.heading)
+            finder.distance = utils.raycast(walls, finder, a1x, a1y, self.heading, self.default_robot_size)
