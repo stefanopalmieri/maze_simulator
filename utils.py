@@ -1,7 +1,4 @@
-import geometry
-import linex
 import math
-
 
 def distance(x1, y1, x2, y2):
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
@@ -79,7 +76,6 @@ def intersection(A, B, C, D):
     else:
         return None
 
-
 def raycast(walls, finder, a1x, a1y, heading, radius):
 
     shortest_distance = finder.max_range
@@ -102,4 +98,27 @@ def raycast(walls, finder, a1x, a1y, heading, radius):
             if curr_distance < shortest_distance:
                 shortest_distance = curr_distance
 
-    return shortest_distance - radius
+    return shortest_distance
+
+# Keep angle between -pi and pi
+def normalize(angle):
+    width = 2 * math.pi
+    offset = angle + math.pi
+    return offset - ( math.floor(offset / width) * width ) - math.pi
+
+def radar_detect(goal, x, y, start_angle, end_angle, r_range):
+
+    start_angle = normalize(start_angle)
+    end_angle = normalize(end_angle)
+
+    if (distance(x, y, goal.x, goal.y) > r_range):
+        return 0.0
+    else:
+        angle = math.atan2(-(goal.y-y),(goal.x-x))
+        print(start_angle, " ", end_angle, " ", angle)
+        if start_angle <= angle and angle < end_angle:
+            return 1.0
+        elif start_angle <= angle and angle < -end_angle:
+            return 1.0
+        else:
+            return 0.0

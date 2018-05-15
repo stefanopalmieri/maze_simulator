@@ -34,11 +34,12 @@ class MazeSimulator():
             self.env.robot.undo()
         # Update RangeFinders
         self.env.robot.update_rangefinders(self.env.walls)
+        self.env.robot.update_radars(self.env.goal)
 
     def step(self, action, time_delta):
-        observation = 0
-        done = 0
-        info = 0
+        observation = self.env.robot.get_rangefinder_observations()
+        done = self.reached_goal
+        info = "no info"
 
         self.step_robot(action, time_delta)
         done = self.update_pois()
@@ -49,14 +50,6 @@ class MazeSimulator():
         for wall in self.env.walls:
             if utils.collide(wall, self.env.robot):
                 return True
-
-    def update_rangefinders(self):
-        for finder in self.env.robot.rangefinders:
-            length = self.env.robot.default_robot_size
-            angle = self.env.robot.heading + finder.angle
-            a2x = self.env.robot.location[0] + (length) * math.cos(angle)
-            a2y = self.env.robot.location[1] - (length) * math.sin(angle)
-            finder.distance = utils.raycast(self.env.walls, finder, a2x, a2y, self.env.robot.heading)
         
     def update_pois(self):
         """

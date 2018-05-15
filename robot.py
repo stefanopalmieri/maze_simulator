@@ -27,6 +27,7 @@ class Robot():
         for i in range(0,4):
             between_angle = math.pi/2.0
             start_angle = math.pi/4-(between_angle*i)
+            print(start_angle, " ", start_angle + between_angle)
             self.radars.append(Radar(start_angle, start_angle + between_angle))
 
     def rand_bool(self):
@@ -63,13 +64,25 @@ class Robot():
         y = self.location[1] - dy
         self.location = (x, y)
 
+    def get_rangefinder_observations(self):
+        observations = map(lambda x: x.get_value(), self.rangefinders)
+        return observations
+
     def update_rangefinders(self, walls):
         for finder in self.rangefinders:
             length = self.default_robot_size
             angle = self.heading + finder.angle
             a1x = self.location[0]
             a1y = self.location[1]
-            #a2x = self.location[0] + (length) * math.cos(angle)
-            #a2y = self.location[1] - (length) * math.sin(angle)
-            #finder.distance = utils.raycast(walls, finder, a2x, a2y, self.heading)
             finder.distance = utils.raycast(walls, finder, a1x, a1y, self.heading, self.default_robot_size)
+
+    def update_radars(self, goal):
+        for radar in self.radars:
+            r_range = radar.max_range
+            start_angle = self.heading + radar.start_angle
+            end_angle = self.heading + radar.end_angle
+            x = self.location[0]
+            y = self.location[1]
+            radar.detecting = utils.radar_detect(goal, x, y, start_angle, end_angle, r_range)
+        print("_____")
+

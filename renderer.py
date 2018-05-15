@@ -28,25 +28,26 @@ class Renderer():
             pygame.draw.line(self.screen, color, [ax, ay], [bx,by], LINE_WIDTH)
 
     def render_rangefinder(self, x, y, radius, heading, finder):
-        length = radius + finder.distance
+        length = finder.distance
         angle = heading + finder.angle
         bx = x + (length) * math.cos(angle)
         by = y - (length) * math.sin(angle)
         pygame.draw.line(self.screen, GREEN, [x, y], [bx,by], LINE_WIDTH)
 
-    """
-    Cannot render with opacity without blitting in pygame.
-    I choose not to render radar.
-        def render_radar(self, x, y, radius, heading, radar):
-            length = radius + radar.max_range
-            start_angle = heading + radar.start_angle
-            end_angle = heading + radar.end_angle
-            while start_angle < end_angle:
-                bx = x + (length) * math.cos(start_angle)
-                by = y - (length) * math.sin(start_angle)
-                start_angle += 0.01
-                pygame.draw.line(self.screen, (100,100,100,200), [x, y], [bx,by], LINE_WIDTH)
-    """
+    def render_radar(self, x, y, radius, heading, radar):
+
+        length = radius + radar.max_range
+        start_angle = heading + radar.start_angle
+        end_angle = heading + radar.end_angle
+        while start_angle < end_angle:
+            bx = x + (length) * math.cos(start_angle)
+            by = y - (length) * math.sin(start_angle)
+            start_angle += 0.01
+            if (radar.detecting > 0):
+                pygame.draw.line(self.screen, (100,0,0,200), [x, y], [bx,by], LINE_WIDTH)
+            else:
+                pass
+                #pygame.draw.line(self.screen, (100,100,100,200), [x, y], [bx,by], LINE_WIDTH)
 
     def render_robot(self, robot):
         x = int(robot.location[0])
@@ -54,9 +55,8 @@ class Renderer():
         radius = robot.default_robot_size
         for finder in robot.rangefinders:
             self.render_rangefinder(x, y, radius, robot.heading, finder)
-        #for radar in robot.radars:
-        #    self.render_radar(x, y, radius, robot.heading, radar)
-        #    break
+        for radar in robot.radars:
+            self.render_radar(x, y, radius, robot.heading, radar)
         pygame.draw.circle(self.screen, WHITE, [x, y], int(radius))
         pygame.draw.circle(self.screen, (0,0,0), [x, y], int(radius), LINE_WIDTH)
 

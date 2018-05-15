@@ -5,9 +5,9 @@ class RangeFinder():
         self.max_range = max_range
         self.distance = -1
 
-    def get_value():
-        return distance/max_range;
+    def get_value(self):
+        return self.distance / self.max_range;
 
-    def get_value_raw():
-        return distance
+    def get_value_raw(self):
+        return self.distance
 
