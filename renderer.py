@@ -36,7 +36,7 @@ class Renderer():
 
     def render_radar(self, x, y, radius, heading, radar):
 
-        length = radius + radar.max_range
+        length = radar.max_range
         start_angle = heading + radar.start_angle
         end_angle = heading + radar.end_angle
         while start_angle < end_angle:
@@ -44,19 +44,18 @@ class Renderer():
             by = y - (length) * math.sin(start_angle)
             start_angle += 0.01
             if (radar.detecting > 0):
-                pygame.draw.line(self.screen, (100,0,0,200), [x, y], [bx,by], LINE_WIDTH)
+                pygame.draw.line(self.screen, (200,50,0), [x, y], [bx,by], LINE_WIDTH)
             else:
-                pass
-                #pygame.draw.line(self.screen, (100,100,100,200), [x, y], [bx,by], LINE_WIDTH)
+                pygame.draw.line(self.screen, (200,200,200), [x, y], [bx,by], LINE_WIDTH)
 
     def render_robot(self, robot):
         x = int(robot.location[0])
         y = int(robot.location[1])
         radius = robot.default_robot_size
-        for finder in robot.rangefinders:
-            self.render_rangefinder(x, y, radius, robot.heading, finder)
         for radar in robot.radars:
             self.render_radar(x, y, radius, robot.heading, radar)
+        for finder in robot.rangefinders:
+            self.render_rangefinder(x, y, radius, robot.heading, finder)
         pygame.draw.circle(self.screen, WHITE, [x, y], int(radius))
         pygame.draw.circle(self.screen, (0,0,0), [x, y], int(radius), LINE_WIDTH)
 
@@ -78,9 +77,9 @@ class Renderer():
 
     def render(self, env):
         self.screen.fill(WHITE)
+        self.render_robot(env.robot)
         self.render_walls(env.walls)
         self.render_pois(env.pois)
         self.render_goal(env.goal)
         #self.render_aoi()
-        self.render_robot(env.robot)
         pygame.display.update() 

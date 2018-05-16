@@ -27,7 +27,6 @@ class Robot():
         for i in range(0,4):
             between_angle = math.pi/2.0
             start_angle = math.pi/4-(between_angle*i)
-            print(start_angle, " ", start_angle + between_angle)
             self.radars.append(Radar(start_angle, start_angle + between_angle))
 
     def rand_bool(self):
@@ -84,5 +83,4 @@ class Robot():
             x = self.location[0]
             y = self.location[1]
             radar.detecting = utils.radar_detect(goal, x, y, start_angle, end_angle, r_range)
-        print("_____")
 

@@ -103,8 +103,8 @@ def raycast(walls, finder, a1x, a1y, heading, radius):
 # Keep angle between -pi and pi
 def normalize(angle):
     width = 2 * math.pi
-    offset = angle + math.pi
-    return offset - ( math.floor(offset / width) * width ) - math.pi
+    offset = angle
+    return offset - ( math.floor(offset / width) * width )
 
 def radar_detect(goal, x, y, start_angle, end_angle, r_range):
 
@@ -114,11 +114,7 @@ def radar_detect(goal, x, y, start_angle, end_angle, r_range):
     if (distance(x, y, goal.x, goal.y) > r_range):
         return 0.0
     else:
-        angle = math.atan2(-(goal.y-y),(goal.x-x))
-        print(start_angle, " ", end_angle, " ", angle)
+        angle = normalize(math.atan2(-(goal.y-y),(goal.x-x)))
         if start_angle <= angle and angle < end_angle:
             return 1.0
-        elif start_angle <= angle and angle < -end_angle:
-            return 1.0
-        else:
-            return 0.0
+    return 0
