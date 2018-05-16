@@ -6,6 +6,6 @@ class Radar():
         self.max_range = 100.0
         self.detecting = 0
 
-    def get_value():
+    def get_value(self):
         return self.detecting
 

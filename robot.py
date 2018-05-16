@@ -67,6 +67,10 @@ class Robot():
         observations = map(lambda x: x.get_value(), self.rangefinders)
         return observations
 
+    def get_radar_observations(self):
+        observations = map(lambda x: x.get_value(), self.radars)
+        return observations
+
     def update_rangefinders(self, walls):
         for finder in self.rangefinders:
             length = self.default_robot_size

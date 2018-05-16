@@ -15,9 +15,12 @@ def main():
         if keys[pygame.K_RIGHT]:
             action = [0, 0, 0.05]
 
-        observation, done, info = sim.step(action, 0.2)
-        #for obs in observation:
-            #print(obs)
+        finder_obs, radar_obs, done = sim.step(action, 0.2)
+        for obs in finder_obs:
+            print(obs)
+        for obs in radar_obs:
+            print(obs)
+
         pygame.event.pump()
         if done:
             print("Episode finished after {} timesteps".format(t+1))

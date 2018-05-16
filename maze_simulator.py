@@ -37,14 +37,14 @@ class MazeSimulator():
         self.env.robot.update_radars(self.env.goal)
 
     def step(self, action, time_delta):
-        observation = self.env.robot.get_rangefinder_observations()
+        finder_obs = self.env.robot.get_rangefinder_observations()
+        radar_obs = self.env.robot.get_radar_observations()
         done = self.reached_goal
-        info = "no info"
 
         self.step_robot(action, time_delta)
         done = self.update_pois()
 
-        return observation, done, info
+        return finder_obs, radar_obs, done
 
     def check_collisions(self):
         for wall in self.env.walls:
