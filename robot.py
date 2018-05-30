@@ -16,7 +16,7 @@ class Robot():
         self.heading = math.pi/2
         self.location = location
         self.old_location = location
-        self.time_step = 0.1
+        self.time_step = 0.099
         self.heading_noise = 0.0
         self.rangefinders = []
         self.radars = []

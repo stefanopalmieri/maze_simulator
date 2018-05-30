@@ -3,10 +3,10 @@ import time
 from maze_simulator import MazeSimulator
 
 def main():
-    sim = MazeSimulator(render=True, xml_file='hardmaze_env.xml')
+    sim = MazeSimulator(render=True, xml_file='ENV_dual_task.xml')
 
     for t in range(30000):
-        time.sleep(0.01)
+        time.sleep(0.005)
         sim.render()
         keys = pygame.key.get_pressed()
         action = [0, 0.4, 0]
@@ -16,10 +16,6 @@ def main():
             action = [0, 0, 0.05]
 
         finder_obs, radar_obs, done = sim.step(action, 0.2)
-        for obs in finder_obs:
-            print(obs)
-        for obs in radar_obs:
-            print(obs)
 
         pygame.event.pump()
         if done:

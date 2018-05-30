@@ -89,8 +89,6 @@ def raycast(walls, finder, a1x, a1y, heading, radius):
         p2 = (a2x, a2y)
         p3 = (wall.ax, wall.ay)
         p4 = (wall.bx, wall.by)
-        #point = geometry.calculateIntersectPoint(p1, p2, p3, p4)
-        #point = linex.segment_intersect([[a1x, a1y],[a2x, a2y]],[[wall.ax, wall.ay],[wall.bx, wall.by]])
         point = intersection(p1, p2, p3, p4)
 
         if point is not None:
